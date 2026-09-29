@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Глоу-ап борца</title>
+<style>
+:root{--bg:#f3f1ec;--card:#fff;--ink:#1b1f24;--mut:#66707a;--acc:#d6362b;--line:#e2ded5;--w:#d6362b;--f:#2f8f5b;--s:#2b6fd6;--l:#8a8f98;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171b;--card:#1e2329;--ink:#eef0f2;--mut:#98a1ab;--line:#2c333b;--acc:#ff5a4d;--w:#ff5a4d;--f:#4fc48a;--s:#5b9bff}}
+:root[data-theme="dark"]{--bg:#14171b;--card:#1e2329;--ink:#eef0f2;--mut:#98a1ab;--line:#2c333b;--acc:#ff5a4d;--w:#ff5a4d;--f:#4fc48a;--s:#5b9bff}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:84px}
+main{max-width:640px;margin:0 auto;padding:16px}
+h1{font:800 30px/1.05 Impact,"Arial Narrow Bold","Arial Black",sans-serif;letter-spacing:.5px;margin:6px 0 2px}
+h2{font-size:18px;margin:18px 0 8px}h3{font-size:16px;margin:0 0 6px}
+.sub{color:var(--mut);margin:0 0 12px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 10px}
+.card ul{margin:4px 0 0;padding-left:18px}.card li{margin:3px 0}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;border:0;background:none;color:var(--mut);padding:12px 2px;font:600 13px inherit;font-family:inherit;cursor:pointer}
+nav button.on{color:var(--acc);box-shadow:inset 0 3px 0 var(--acc)}
+.tab{display:none}.tab.on{display:block}
+.row{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--l);border-radius:8px;margin:0 0 6px}
+.row.w{border-left-color:var(--w)}.row.f{border-left-color:var(--f)}.row.s{border-left-color:var(--s)}
+.row input{width:22px;height:22px;margin-top:2px;accent-color:var(--acc);flex:none}
+.row b{display:block;font-size:14px;color:var(--mut)}.row.done span{text-decoration:line-through;opacity:.5}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:6px 0 14px}.bar i{display:block;height:100%;background:var(--acc);width:0;transition:width .3s}
+.wk{display:grid;grid-template-columns:34px 1fr;gap:4px 10px;font-size:14px}.wk b{color:var(--acc)}
+.note{border-left:4px solid var(--acc);padding:8px 12px;background:var(--card);border-radius:6px;font-size:14px;margin:10px 0}
+</style></head><body><main>
+<h1>ГЛОУ-АП БОРЦА</h1><p class="sub" id="d"></p>
+<section class="tab on" id="t0"><div class="bar"><i id="pb"></i></div><div id="today"></div></section>
+<section class="tab" id="t1"></section>
+<section class="tab" id="t2"></section>
+<section class="tab" id="t3"></section>
+<section class="tab" id="t4"></section>
+</main>
+<nav id="nav"></nav>
+<script>
+const DN=['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'],SH=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+const WO={1:'Дом A: отжимания и пресс',3:'Дом B: турник и ноги',5:'Дом C: лёгкая и растяжка'};
+function plan(d){
+ const r=[],wr=(d==2||d==4),sat=d==6,sun=d==0;
+ r.push([sun?'08:30':sat?'07:30':'07:00','Подъём, стакан воды, умывание, крем с SPF','s']);
+ r.push([sun?'09:00':sat?'07:45':'07:20',sat?'Лёгкий завтрак: овсянка, банан, яйцо':'Завтрак: каша или яйца, молоко, фрукт','f']);
+ if(!sun&&!sat)r.push(['08:00–14:00','Школа (время можно поменять под себя)','l']);
+ if(sat){r.push(['10:00','БОРЬБА','w']);r.push(['12:00','Душ сразу после тренировки, обед с мясом или рыбой и гарниром','f']);}
+ else{
+  r.push([sun?'13:30':'14:30','Обед: мясо/рыба + гарнир + овощи','f']);
+  if(wr){r.push(['15:15','Перекус: банан, бутерброд или творог','f']);r.push(['17:00','БОРЬБА','w']);r.push(['19:00','Душ сразу после тренировки, ужин: белок + гарнир','f']);}
+  else if(WO[d]){r.push(['16:00','Тренировка дома: '+WO[d],'w']);r.push(['16:50','Душ и перекус: молоко/йогурт + фрукт','f']);r.push(['18:00','Английский','l']);r.push(['19:30','Ужин: белок + гарнир + овощи','f']);}
+  else r.push(['17:00','Отдых: прогулка 30–40 минут, растяжка, планы на неделю','l']);
+  if(sun)r.push(['19:00','Ужин без спешки','f']);
+ }
+ r.push(['21:30','Кефир или творог, вечерний уход, телефон в сторону','s']);
+ r.push(['22:30','Сон (цель 9 часов; сдвигай на 15 минут раньше каждые 3 дня)','l']);
+ return r;}
+function md(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return[]}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+const now=new Date(),wd=now.getDay(),key='gu-'+now.toISOString().slice(0,10);
+document.getElementById('d').textContent=DN[wd]+', '+now.toLocaleDateString('ru-RU',{day:'numeric',month:'long'});
+function renderToday(){
+ const p=plan(wd),ck=md(key),el=document.getElementById('today');
+ el.innerHTML=p.map((x,i)=>`<label class="row ${x[2]} ${ck.includes(i)?'done':''}"><input type="checkbox" data-i="${i}" ${ck.includes(i)?'checked':''}><span><b>${x[0]}</b>${x[1]}</span></label>`).join('');
+ document.getElementById('pb').style.width=(ck.length/p.length*100)+'%';
+ el.querySelectorAll('input').forEach(c=>c.onchange=()=>{let a=md(key);const i=+c.dataset.i;a=c.checked?[...a,i]:a.filter(v=>v!==i);sv(key,a);renderToday();});}
+renderToday();
+document.getElementById('t1').innerHTML='<h2>Неделя</h2><p class="sub">6 тренировочных дней, воскресенье отдых.</p><div class="card wk">'+[1,2,3,4,5,6,0].map(d=>{const s={1:'Дом A, 16:00 · Английский 18:00',2:'Борьба 17:00',3:'Дом B, 16:00 · Английский 18:00',4:'Борьба 17:00',5:'Дом C, 16:00 · Английский 18:00',6:'Борьба 10:00',0:'Полный отдых, прогулка, растяжка'}[d];return `<b>${SH[d]}</b><span>${s}</span>`}).join('')+'</div><div class="note">Отбой в 22:30. Растёт и восстанавливается организм именно во сне.</div>';
+const ex=(t,a)=>`<div class="card"><h3>${t}</h3><ul>${a.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+document.getElementById('t2').innerHTML='<h2>Тренировки</h2><p class="sub">Разминка 5 минут перед каждой. Отдых между подходами 60–90 секунд.</p>'
++ex('Дом A (пн): отжимания и пресс',['Отжимания 4×8–15','Отжимания узким хватом 3×6–10','Подъём ног лёжа 3×10–15','Скручивания 3×15','Планка 3×30–45 сек'])
++ex('Дом B (ср): турник и ноги',['Подтягивания 4×сколько сможешь (если 0–2: медленные спуски 3–5 сек ×5)','Вис на турнике 3×20–30 сек','Приседания 4×15','Выпады 3×10 на ногу','Ягодичный мостик 3×15'])
++ex('Дом C (пт): лёгкая',['Подтягивания 3×5 без предела','Боковая планка 3×20 сек','Скакалка или бег на месте 5 минут','Растяжка 10 минут: спина, бёдра, плечи'])
++ex('Борьба (вт, чт, сб)',['Слушай тренера и не сгоняй вес','Пей воду до, во время и после','Боль в суставе или шее: сразу скажи тренеру'])
++'<div class="note">Прогресс: добавляй 1–2 повтора в неделю. Техника важнее количества.</div>';
+document.getElementById('t3').innerHTML='<h2>Уход за лицом</h2><p class="sub">Кожа нормальная, редкие прыщи. Достаточно простого ухода.</p>'
++ex('Утро (2 минуты)',['Умыться мягким гелем','Лёгкий увлажняющий крем','Солнцезащитный крем SPF 30+ днём'])
++ex('Вечер и после тренировок',['После борьбы сразу душ с мылом или гелем','Вечером умыться и нанести крем','Чистое полотенце и форма каждый раз','Наволочку менять раз в неделю'])
++ex('Если появился прыщ',['Не давить и не ковырять','Не трогать лицо грязными руками','Если прыщей стало много или больно, показаться дерматологу'])
++'<div class="note">Борьба: красные круглые зудящие пятна на коже могут быть грибком. Покажи родителям и тренеру.</div>';
+document.getElementById('t4').innerHTML='<h2>Питание</h2><p class="sub">Цель: расти, восстанавливаться и набирать мышцы. Без диет и дефицита калорий.</p>'
++ex('Правила',['5 приёмов пищи: 3 основных + 2 перекуса','Белок в каждом приёме: яйца, мясо, рыба, творог, молоко','Гарнир: рис, гречка, макароны, картофель','Овощи и фрукты каждый день','Вода в течение дня, не только на тренировке'])
++ex('Примерный день',['Завтрак: овсянка с молоком, 2 яйца, банан','Обед: курица, рис, салат','Перекус: бутерброд с сыром или творог','Ужин: рыба или мясо, гречка, овощи','Вечером: кефир или творог'])
++ex('Вокруг тренировки',['За 2 часа до борьбы: еда с углеводами, без жирного','После: белок и углеводы в течение часа'])
++'<div class="note">Не сгоняй вес, не пропускай еду и не принимай добавки без врача. В 14 лет тело ещё растёт.</div>';
+const nm=['Сегодня','Неделя','Трен.','Кожа','Еда'],nv=document.getElementById('nav');
+nm.forEach((n,i)=>{const b=document.createElement('button');b.textContent=n;if(!i)b.className='on';b.onclick=()=>{document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('on',i==j));[...nv.children].forEach((c,j)=>c.classList.toggle('on',i==j));scrollTo(0,0)};nv.appendChild(b)});
+</script></body></html>
